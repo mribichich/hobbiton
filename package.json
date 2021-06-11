@@ -13,7 +13,8 @@
     "build:prod": "cross-env NODE_ENV=production yarn clean && tsc",
     "test": "cross-env NODE_ENV=test jest",
     "test:w": "yarn test --watch",
-    "test:cov": "yarn test --coverage"
+    "test:cov": "yarn test --coverage",
+    "typecheck": "tsc --noEmit"
   },
   "dependencies": {
     "axios": "^0.18.0",
@@ -36,6 +37,8 @@
     "@types/glob": "^7.1.1",
     "@types/ramda": "^0.26.7",
     "@types/unzipper": "^0.9.1",
+    "@types/yargs": "^13.0.2",
+    "cross-env": "^6.0.0",
     "nodemon": "^1.18.11",
     "typescript": "^3.4.3"
   }

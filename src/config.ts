@@ -1,6 +1,7 @@
 import fs from 'fs';
 import os from 'os';
 import { mergeDeepRight } from 'ramda';
+import { argv } from 'yargs';
 
 interface Config {
   serviceHost: string;
@@ -12,9 +13,11 @@ interface Config {
   // mongoDbUser: string | null;
   // mongoDbPassword: string | null;
 
-  // graylogHost: string;
-  // graylogPort: number;
-  // graylogEnv: string;
+  graylogHost: string;
+  graylogPort: number;
+  graylogEnv: string;
+
+  clientName?: string;
 
   installationFolder: string;
   downloadsFolder: string;
@@ -32,9 +35,9 @@ const DEFAULT_CONFIG: Config = {
   // mongoDbUser: null,
   // mongoDbPassword: null,
 
-  // graylogHost: 'localhost',
-  // graylogPort: 12201,
-  // graylogEnv: '',
+  graylogHost: 'localhost',
+  graylogPort: 12201,
+  graylogEnv: '',
 
   installationFolder: 'c:\\apps\\hobbiton',
   downloadsFolder: os.tmpdir(),
@@ -46,7 +49,8 @@ let config: Config = {
   serviceHost: defaultTo(DEFAULT_CONFIG.serviceHost, process.env.SERVICE_HOST),
   servicePort: defaultTo(
     DEFAULT_CONFIG.servicePort,
-    process.env.SERVICE_PORT ? parseInt(process.env.SERVICE_PORT) : null
+    process.env.SERVICE_PORT ? parseInt(process.env.SERVICE_PORT) : null,
+    argv.servicePort
   ),
 
   // mongoDbHost: defaultTo(DEFAULT_CONFIG.mongoDbHost, process.env.HOBBITON_DB_HOST),
@@ -58,12 +62,14 @@ let config: Config = {
   // mongoDbUser: defaultTo(DEFAULT_CONFIG.mongoDbUser, process.env.HOBBITON_DB_USER),
   // mongoDbPassword: defaultTo(DEFAULT_CONFIG.mongoDbPassword, process.env.HOBBITON_DB_PASSWORD),
 
-  // graylogHost: defaultTo(DEFAULT_CONFIG.graylogHost, process.env.SIS_GRAYLOG_HOST),
-  // graylogPort: defaultTo(
-  //   DEFAULT_CONFIG.graylogPort,
-  //   process.env.SIS_GRAYLOG_PORT ? parseInt(process.env.SIS_GRAYLOG_PORT) : null
-  // ),
-  // graylogEnv: defaultTo(DEFAULT_CONFIG.graylogEnv, process.env.SIS_GRAYLOG_ENV),
+  graylogHost: defaultTo(DEFAULT_CONFIG.graylogHost, process.env.SIS_GRAYLOG_HOST),
+  graylogPort: defaultTo(
+    DEFAULT_CONFIG.graylogPort,
+    process.env.SIS_GRAYLOG_PORT ? parseInt(process.env.SIS_GRAYLOG_PORT) : null
+  ),
+  graylogEnv: defaultTo(DEFAULT_CONFIG.graylogEnv, process.env.SIS_GRAYLOG_ENV),
+
+  clientName: defaultTo(DEFAULT_CONFIG.clientName, process.env.CLIENT_NAME, argv.clientName),
 
   installationFolder: defaultTo(DEFAULT_CONFIG.installationFolder, process.env.INSTALLATION_FOLDER),
   downloadsFolder: defaultTo(DEFAULT_CONFIG.downloadsFolder, process.env.DOWNLOADS_FOLDER),

@@ -22,3 +22,9 @@ export async function getAppVersion(name: string) {
 
   return await readFile(filePath, 'utf8');
 }
+
+export async function getAppConfig(name: string) {
+  const filePath = path.join('/etc', name, '.env');
+
+  return await readFile(filePath, 'utf8');
+}

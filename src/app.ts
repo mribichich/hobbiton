@@ -13,7 +13,7 @@ import { execFile } from 'child_process';
 import config from './config';
 import bodyParser from 'body-parser';
 import { APPS } from './apps';
-import { getAppVersion, isAppInstalled } from './utils';
+import { getAppVersion, isAppInstalled, getAppConfig } from './utils';
 
 const gitlabAxios = axios.create({
   baseURL: config.gitlabUrl,
@@ -61,7 +61,7 @@ app.get('/api/apps', async (req, res) => {
     })
   );
 
-  res.json(apps);
+  res.json({ name: config.clientName, apps });
 });
 
 app.get('/api/currentVersion/:name', async (req, res) => {
@@ -164,6 +164,20 @@ app.post('/api/update/:projectId', async (req, res) => {
         });
       });
   });
+});
+
+app.get('/api/config/:name', async (req, res) => {
+  const { name } = req.params;
+
+  try {
+    const config = await getAppConfig(name);
+
+    res.json({ config });
+  } catch (error) {
+    logger.error(`Error getting VERSION file from: ${name}`, { error });
+
+    res.sendStatus(500);
+  }
 });
 
 export function listen(host: string, port: number) {
